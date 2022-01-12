@@ -1,5 +1,5 @@
 from logging import NullHandler
-from flask import Flask, request, render_template, url_for, redirect
+from flask import Flask, request, render_template, url_for, redirect, jsonify
 from flask_cors import CORS
 from entities.Message import Message
 from storage import Storage
@@ -30,8 +30,9 @@ def get_messages():
 # Добавление записи о сообщении
 @app.route('/messages', methods=['POST'])
 def add_message():
-    name :str=request.form['sender']
-    message :str=request.form['message']
+    print(request.form)
+    name :str = request.form
+    message :str = request.form
     error = None
 
     if not name or len(name) < 1 or len(name) > 30:
@@ -40,13 +41,12 @@ def add_message():
         error = "Многострочное поле ввода текста сообщения должно иметь длину от 1 до 1000 символов"
     
     if not error:
-        Storage.add_message(
-                Message(id=None, name=name, message=message,
-                                clap=0))
-        message = ""
-        name = ""
-    messages = Storage.get_messages()
-    return render_template("index.html", messages = messages, name = name, message = message, error = error)
+        
+        data = Storage.add_message(
+                Message(id = None, name=name, message=message,
+                                clap = 0))
+        return jsonify(data)
+    return error
 
 # Увеличение количества хлопков
 @app.route('/messages/clap/<int:message_id>', methods=['POST'])

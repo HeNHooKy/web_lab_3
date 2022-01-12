@@ -1,13 +1,14 @@
-const API_URL = 'http://192.168.100.6:3000/';
+const API_URL = 'http://localhost:3000';
 
-async function removeStudent(id) {
-    await fetch(`${API_URL}/attendance/${id}`, {
-        method: 'DELETE',
+async function sendMessage(formData) {
+    await fetch(`${API_URL}/messages`, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
+        body: formData
     }).then(() => {
-        document.getElementById(`student__${id}`).remove();
+        //--IGNORE IT
     });
 }
 
@@ -20,21 +21,6 @@ async function fetchStudentsAttendances() {
     document.querySelector("#attendance_list").append(...studentElements);
 }
 
-function create_attendance_item(id, fio, date, student_group){
-    const element = document.createElement("template");
-    element.innerHTML = `
-       <li class="list_item" id="student__${id}">
-        <div class="student">
-            <div class="student__date">${date}</div>
-            <div class="student__name">${fio}</div>
-            <div class="student__group">${student_group}</div>
-            <button class="student__remove button button_danger" 
-            onclick="removeStudent(${id})">❌</button>
-        </div>
-       </li>
-       `.trim();
-    return element.content.firstChild;
-}
 
 async function addStudentAttendance(formData){
     // const formData = new FormData(document.querySelector("#student_info"));
@@ -48,19 +34,14 @@ async function addStudentAttendance(formData){
     return addStudentAttendanceResponse["added_id"];
 }
 
-document.querySelector("#student_info").addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const formData = new FormData(document.querySelector("#student_info"));
-
+document.querySelector("#send-message-form").addEventListener('submit', async(event) => {
     try
     {
-        const attendance_id = await addStudentAttendance(formData);
-        document.querySelector("#attendance_list")
-            .appendChild(create_attendance_item(attendance_id, formData.get("fio"), formData.get("date"), formData.get("student_group")));
+        event.preventDefault();
+        const formData = new FormData(document.querySelector("#send-message-form"));
+        sendMessage(formData);
     }
     catch{
         alert("The error occurred while adding the record");
     }
 });
-
-fetchStudentsAttendances();

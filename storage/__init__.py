@@ -14,7 +14,7 @@ class Storage:
     def get_messages() -> Cursor:
         """Получение всего списка сообщений"""
         cur = db.cursor()
-        messages = cur.execute('SELECT * FROM messages ORDER BY id DESC').fetchall()
+        messages = cur.execute('SELECT * FROM messages ORDER BY clap DESC').fetchall()
         db.commit()
         return messages
 

@@ -19,7 +19,7 @@
       </nav>
 
       <main class="container flex-fill my-3">
-        <form class="card border-secondary mb-3" data-test="send-form" action="/messages" method="POST">
+        <form id="send-message-form" class="card border-secondary mb-3" data-test="send-form">
           <fieldset>
             <legend class="card-header h5 border-secondary bg-dark text-light">📩 Отправить письмо</legend>
             <div class="card-body">
@@ -79,5 +79,8 @@
         </div>
       </footer>
     </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <noscript>Sorry, your browser does not support JavaScript!</noscript>
   </body>
 </html>
