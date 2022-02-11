@@ -19,7 +19,7 @@
       </nav>
 
       <main class="container flex-fill my-3">
-        <form id="send-message-form" class="card border-secondary mb-3" data-test="send-form">
+        <form class="card border-secondary mb-3" id="send-message-form" data-test="send-form" action="/messages" method="POST">
           <fieldset>
             <legend class="card-header h5 border-secondary bg-dark text-light">📩 Отправить письмо</legend>
             <div class="card-body">
@@ -49,20 +49,20 @@
           </fieldset>
         </form>
 
-        <ul class="list-unstyled">
+        <ul class="list-unstyled" id="messages">
           {% for (id, name, message, clap) in messages %}
           <li class="mb-3">
             <article class="card" data-test="message">
               <div class="card-body">
                 <header class="card-title d-flex">
                   <div class="text-muted" data-test="message-author">{{ name }}</div>
-                  <a href="/messages/{{id}}" class="card-link ms-auto" data-test="message-open">Открыть ↗️</a>
+                  <a href="/message_page/{{id}}" class="card-link ms-auto" data-test="message-open">Открыть ↗️</a>
                 </header>
                 <p class="card-text" data-test="message-text">
                   {{ message }}
                 </p>
                 <div class="d-flex">
-                  <form class="ms-auto" data-test="message-clap-form" action="/messages/clap/{{id}}", method="POST">
+                  <form class="ms-auto clap" data-test="message-clap-form" message_id="{{id}}" action="/messages/clap/{{id}}" method="POST">
                     <button class="btn">👏🏻 <span data-test="clap-count">{{ clap }}</span></button>
                   </form>
                 </div>
@@ -78,9 +78,9 @@
           Лабораторная работа по курсу Web-программирования. Выполнил Гилёв Дмитрий ПМИ-1
         </div>
       </footer>
+      
     </div>
 
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <noscript>Sorry, your browser does not support JavaScript!</noscript>
+    <script src="{{ url_for('static', filename='js/main.js') }}"> </script>
   </body>
 </html>

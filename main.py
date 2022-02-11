@@ -4,6 +4,7 @@ from flask_cors import CORS
 from entities.Message import Message
 from storage import Storage
 from entities import Message
+import json
 
 # Создаём приложение
 app = Flask(__name__)
@@ -15,10 +16,11 @@ def home():
     messages = Storage.get_messages()
     return render_template("index.html", messages = messages)
 
-@app.route('/messages/<int:message_id>', methods=['GET'])
+@app.route('/message_page/<int:message_id>', methods=['GET'])
 def show_message(message_id: int):
     (id, name, message, clap) = Storage.get_message(message_id)
     return render_template("message.html", id = id, name = name, message = message, clap = clap)
+
 
 # Получение списка записей о сообщении
 @app.route('/messages', methods=['GET'])
@@ -26,13 +28,19 @@ def get_messages():
     messages = Storage.get_messages()
     return render_template("index.html", messages = messages)
 
+@app.route('/message_info/<int:message_id>', methods=['GET'])
+def get_message(message_id: int):
+    message = Storage.get_message(message_id)
+    return jsonify(message)
+
 
 # Добавление записи о сообщении
 @app.route('/messages', methods=['POST'])
 def add_message():
-    print(request.form)
-    name :str = request.form
-    message :str = request.form
+    body = request.get_json()
+    print(body)
+    name :str = body["sender"]
+    message :str = body["message"]
     error = None
 
     if not name or len(name) < 1 or len(name) > 30:
@@ -41,11 +49,9 @@ def add_message():
         error = "Многострочное поле ввода текста сообщения должно иметь длину от 1 до 1000 символов"
     
     if not error:
-        
-        data = Storage.add_message(
-                Message(id = None, name=name, message=message,
-                                clap = 0))
-        return jsonify(data)
+        message_id = Storage.add_message(Message(id = None, name=name, message=message, clap = 0))
+        result = Storage.get_message(message_id)
+        return jsonify(result)
     return error
 
 # Увеличение количества хлопков
