@@ -23,17 +23,9 @@
           <fieldset>
             <legend class="card-header h5 border-secondary bg-dark text-light">📩 Отправить письмо</legend>
             <div class="card-body">
-              {% if error %}
-              <div class="mb-3" data-test="send-alert">
-                <div class="alert alert-danger">{{ error }} </div>
+              <div id="alert">
+                <!--alert space-->
               </div>
-              {% endif %}
-              <!--<div class="mb-3" data-test="send-alert">-->
-              <!--  <div class="alert alert-warning">Загрузка...</div>-->
-              <!--</div>-->
-              <!--<div class="mb-3" data-test="send-alert">-->
-              <!--  <div class="alert alert-success">Сообщение отправлено</div>-->
-              <!--</div>-->
               <div class="mb-3">
                 <label for="sender" class="form-label">От кого:</label>
                 <input id="sender" name="sender" class="form-control" type="text" placeholder="Имя отправителя" value="{{name}}"/>

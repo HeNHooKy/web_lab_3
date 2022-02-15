@@ -51,8 +51,19 @@ def add_message():
     if not error:
         message_id = Storage.add_message(Message(id = None, name=name, message=message, clap = 0))
         result = Storage.get_message(message_id)
-        return jsonify(result)
-    return error
+        ok_result = dict()
+        ok_result["status"] = "ok"
+        ok_result["id"] = result[0]
+        ok_result["sender"] = result[1]
+        ok_result["message"] = result[2]
+        ok_result["clap"] = result[3]
+
+        return jsonify(ok_result)
+    
+    error_result = dict()
+    error_result["status"] = "error"
+    error_result["message"] = error
+    return jsonify(error_result)
 
 # Увеличение количества хлопков
 @app.route('/messages/clap/<int:message_id>', methods=['POST'])
